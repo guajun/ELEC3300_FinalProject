@@ -107,6 +107,8 @@ Middlewares/Third_Party/FatFs/src/ff_gen_drv.c \
 Middlewares/Third_Party/FatFs/src/option/syscall.c \
 Core/Src/dma.c
 
+C_SOURCES += $(wildcard 3300/*.c) 
+
 # ASM sources
 ASM_SOURCES =  \
 startup_stm32h750xx.s
@@ -173,7 +175,8 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Include \
 -IFATFS/Target \
 -IFATFS/App \
--IMiddlewares/Third_Party/FatFs/src
+-IMiddlewares/Third_Party/FatFs/src \
+-I3300
 
 
 # compile gcc flags
