@@ -1,9 +1,8 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    adc.h
-  * @brief   This file contains all the function prototypes for
-  *          the adc.c file
+  * @file           : fatfs_platform.h
+  * @brief          : fatfs_platform header file
   ******************************************************************************
   * @attention
   *
@@ -15,41 +14,14 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
-  */
+*/
 /* USER CODE END Header */
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __ADC_H__
-#define __ADC_H__
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
-
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-extern ADC_HandleTypeDef hadc1;
-
-extern ADC_HandleTypeDef hadc3;
-
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
-
-void MX_ADC1_Init(void);
-void MX_ADC3_Init(void);
-
-/* USER CODE BEGIN Prototypes */
-
-/* USER CODE END Prototypes */
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* __ADC_H__ */
-
+#include "stm32h7xx_hal.h"
+/* Defines ------------------------------------------------------------------*/
+#define SD_PRESENT               ((uint8_t)0x01)  /* also in bsp_driver_sd.h */
+#define SD_NOT_PRESENT           ((uint8_t)0x00)  /* also in bsp_driver_sd.h */
+#define SD_DETECT_PIN         GPIO_PIN_4
+#define SD_DETECT_GPIO_PORT   GPIOD
+/* Prototypes ---------------------------------------------------------------*/
+uint8_t	BSP_PlatformIsDetected(void);

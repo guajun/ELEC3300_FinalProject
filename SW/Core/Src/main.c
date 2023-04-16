@@ -20,6 +20,8 @@
 #include "main.h"
 #include "adc.h"
 #include "crc.h"
+#include "dma.h"
+#include "fatfs.h"
 #include "fdcan.h"
 #include "i2c.h"
 #include "i2s.h"
@@ -52,6 +54,11 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+FRESULT res; /* FatFs function common result code */
+// uint32_t byteswritten, bytesread; /* File write/read counts */
+// uint8_t wtext[] = "STM32 FATFS works great!"; /* File write buffer */
+// uint8_t rtext[_MAX_SS];/* File read buffer */
+uint8_t working_buffer[512] = {};
 
 /* USER CODE END PV */
 
@@ -126,8 +133,16 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM7_Init();
   MX_TIM15_Init();
+  MX_DMA_Init();
+  MX_FATFS_Init();
+  MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
-
+  res = f_mount(&SDFatFS, (TCHAR const*)SDPath, 0);
+  res=f_mkfs(SDPath, FM_FAT32, 4096, working_buffer, 512);
+  // res = f_open(&SDFile, "0:/STM32.TXT", FA_CREATE_NEW);
+  // res = f_write(&SDFile, wtext, strlen((char *)wtext), (void *)&byteswritten);
+  // f_close(&SDFile);
+  // f_mount(&SDFatFS, (TCHAR const*)NULL, 0);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -219,17 +234,27 @@ void PeriphCommonClock_Config(void)
 
   /** Initializes the peripherals clock
   */
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SDMMC|RCC_PERIPHCLK_FDCAN;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_SDMMC
+                              |RCC_PERIPHCLK_FDCAN;
   PeriphClkInitStruct.PLL2.PLL2M = 5;
   PeriphClkInitStruct.PLL2.PLL2N = 144;
   PeriphClkInitStruct.PLL2.PLL2P = 4;
   PeriphClkInitStruct.PLL2.PLL2Q = 16;
-  PeriphClkInitStruct.PLL2.PLL2R = 3;
+  PeriphClkInitStruct.PLL2.PLL2R = 30;
   PeriphClkInitStruct.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
   PeriphClkInitStruct.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
   PeriphClkInitStruct.PLL2.PLL2FRACN = 0;
+  PeriphClkInitStruct.PLL3.PLL3M = 5;
+  PeriphClkInitStruct.PLL3.PLL3N = 160;
+  PeriphClkInitStruct.PLL3.PLL3P = 5;
+  PeriphClkInitStruct.PLL3.PLL3Q = 2;
+  PeriphClkInitStruct.PLL3.PLL3R = 5;
+  PeriphClkInitStruct.PLL3.PLL3RGE = RCC_PLL3VCIRANGE_2;
+  PeriphClkInitStruct.PLL3.PLL3VCOSEL = RCC_PLL3VCOWIDE;
+  PeriphClkInitStruct.PLL3.PLL3FRACN = 0;
   PeriphClkInitStruct.SdmmcClockSelection = RCC_SDMMCCLKSOURCE_PLL2;
   PeriphClkInitStruct.FdcanClockSelection = RCC_FDCANCLKSOURCE_PLL2;
+  PeriphClkInitStruct.AdcClockSelection = RCC_ADCCLKSOURCE_PLL3;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();

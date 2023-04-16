@@ -73,6 +73,9 @@ void Error_Handler(void);
 #define IMU_RST_GPIO_Port GPIOD
 #define IMU_INT_Pin GPIO_PIN_11
 #define IMU_INT_GPIO_Port GPIOD
+#define IMU_INT_EXTI_IRQn EXTI15_10_IRQn
+#define SD_DET_Pin GPIO_PIN_4
+#define SD_DET_GPIO_Port GPIOD
 #define ENCODER_K_Pin GPIO_PIN_7
 #define ENCODER_K_GPIO_Port GPIOD
 /* USER CODE BEGIN Private defines */
