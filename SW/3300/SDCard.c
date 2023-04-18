@@ -2,6 +2,7 @@
 
 #include "ff.h"
 #include "fatfs.h"
+#include <string.h>
 
 FRESULT res; /* FatFs function common result code */
 uint32_t byteswritten;
