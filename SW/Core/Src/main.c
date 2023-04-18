@@ -137,12 +137,6 @@ int main(void)
   MX_FATFS_Init();
   MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
-  res = f_mount(&SDFatFS, (TCHAR const*)SDPath, 0);
-  res=f_mkfs(SDPath, FM_FAT32, 4096, working_buffer, 512);
-  // res = f_open(&SDFile, "0:/STM32.TXT", FA_CREATE_NEW);
-  // res = f_write(&SDFile, wtext, strlen((char *)wtext), (void *)&byteswritten);
-  // f_close(&SDFile);
-  // f_mount(&SDFatFS, (TCHAR const*)NULL, 0);
   /* USER CODE END 2 */
 
   /* Infinite loop */
