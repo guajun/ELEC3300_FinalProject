@@ -131,7 +131,6 @@ int main(void)
   MX_FATFS_Init();
   MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
-  SDCard_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
