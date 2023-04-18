@@ -131,7 +131,6 @@ int main(void)
   MX_FATFS_Init();
   MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
-  // SDCard_init();
   RotaryEncoder_init();
   /* USER CODE END 2 */
 
@@ -143,8 +142,6 @@ int main(void)
     MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
-    static uint32_t rotaryEncoder;
-    rotaryEncoder = RotaryEncoder_read();
   }
   /* USER CODE END 3 */
 }
