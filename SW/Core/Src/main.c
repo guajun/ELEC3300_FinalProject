@@ -36,6 +36,7 @@
 /* USER CODE BEGIN Includes */
 #include "RotaryEncoder.h"
 #include "IMU.h"
+#include "WS2812B.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,6 +56,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+uint8_t ledTxBuffer[24] = {};
+struct GRB color[3] = {{0xFF,0x00,0x00}, {0x00,0xFF,0x00}, {0x00,0x00,0xFF}};
+uint32_t encoder = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -134,6 +138,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   RotaryEncoder_init();
   IMU_init();
+  WS2812B_convert(color, 3, ledTxBuffer);
+  WS2812B_send(ledTxBuffer, 3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -144,6 +150,7 @@ int main(void)
     MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
+    encoder = RotaryEncoder_read();
   }
   /* USER CODE END 3 */
 }
