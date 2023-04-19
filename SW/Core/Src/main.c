@@ -34,7 +34,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "RotaryEncoder.h"
+#include "IMU.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,12 +55,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-FRESULT res; /* FatFs function common result code */
-// uint32_t byteswritten, bytesread; /* File write/read counts */
-// uint8_t wtext[] = "STM32 FATFS works great!"; /* File write buffer */
-// uint8_t rtext[_MAX_SS];/* File read buffer */
-uint8_t working_buffer[512] = {};
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -137,12 +132,8 @@ int main(void)
   MX_FATFS_Init();
   MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
-  res = f_mount(&SDFatFS, (TCHAR const*)SDPath, 0);
-  res=f_mkfs(SDPath, FM_FAT32, 4096, working_buffer, 512);
-  // res = f_open(&SDFile, "0:/STM32.TXT", FA_CREATE_NEW);
-  // res = f_write(&SDFile, wtext, strlen((char *)wtext), (void *)&byteswritten);
-  // f_close(&SDFile);
-  // f_mount(&SDFatFS, (TCHAR const*)NULL, 0);
+  RotaryEncoder_init();
+  IMU_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
