@@ -34,7 +34,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "RotaryEncoder.h"
+#include "IMU.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -131,7 +132,8 @@ int main(void)
   MX_FATFS_Init();
   MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
-  SDCard_init();
+  RotaryEncoder_init();
+  IMU_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
