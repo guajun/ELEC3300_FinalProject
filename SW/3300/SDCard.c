@@ -11,7 +11,7 @@ uint8_t wtext[] = "STM32 FATFS works great!";
 
 void SDCard_init()
 {
-    res = f_mount(&SDFatFS, (TCHAR const*)SDPath, 0);
+    res = f_mount(&SDFatFS, (TCHAR const*)SDPath, 1);
 
     res = f_open(&SDFile, "STM32.TXT", FA_CREATE_ALWAYS | FA_WRITE);
 
@@ -19,5 +19,5 @@ void SDCard_init()
 
     res = f_close(&SDFile);
 
-    res = f_mount(&SDFatFS, (TCHAR const*)NULL, 0);
+    // res = f_mount(&SDFatFS, (TCHAR const*)NULL, 0);
 }

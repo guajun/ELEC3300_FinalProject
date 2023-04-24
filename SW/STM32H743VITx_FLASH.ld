@@ -6,8 +6,8 @@
 **
 **  Author		: STM32CubeMX
 **
-**  Abstract    : Linker script for STM32H750VBTx series
-**                128Kbytes FLASH and 1056Kbytes RAM
+**  Abstract    : Linker script for STM32H743VITx series
+**                2048Kbytes FLASH and 1056Kbytes RAM
 **
 **                Set heap size, stack size and stack location according
 **                to application requirements.
@@ -66,7 +66,7 @@ RAM_D1 (xrw)      : ORIGIN = 0x24000000, LENGTH = 512K
 RAM_D2 (xrw)      : ORIGIN = 0x30000000, LENGTH = 288K
 RAM_D3 (xrw)      : ORIGIN = 0x38000000, LENGTH = 64K
 ITCMRAM (xrw)      : ORIGIN = 0x00000000, LENGTH = 64K
-FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 128K
+FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 2048K
 }
 
 /* Define output sections */
