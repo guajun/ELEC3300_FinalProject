@@ -3,6 +3,7 @@
 #include "usbh_hid.h"
 #include "usbh_hid_keybd.h"
 #include "usb_host.h"
+#include <string.h>
 
 void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 {
