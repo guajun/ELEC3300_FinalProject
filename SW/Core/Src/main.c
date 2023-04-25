@@ -36,6 +36,10 @@
 /* USER CODE BEGIN Includes */
 #include "RotaryEncoder.h"
 #include "IMU.h"
+#include "SDCard.h"
+#include "TemperatureSensor.h"
+#include "SpaceMouse.h"
+#include "BreathingLight.h"
 #include "WS2812B.h"
 /* USER CODE END Includes */
 
@@ -129,15 +133,21 @@ int main(void)
   MX_SPI4_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
-  MX_TIM6_Init();
   MX_TIM7_Init();
   MX_TIM15_Init();
   MX_DMA_Init();
   MX_FATFS_Init();
   MX_ADC3_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   RotaryEncoder_init();
   IMU_init();
+  SDCard_init();
+  TemperatureSensor_init();
+  SpaceMouse_init();
+  BreathingLight_init();
+
+  // test
   WS2812B_convert(color, 3, ledTxBuffer);
   WS2812B_send(ledTxBuffer, 3);
   /* USER CODE END 2 */
@@ -150,7 +160,7 @@ int main(void)
     MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
-    encoder = RotaryEncoder_read();
+    BreathingLight_update();
   }
   /* USER CODE END 3 */
 }
@@ -238,14 +248,14 @@ void PeriphCommonClock_Config(void)
   PeriphClkInitStruct.PLL2.PLL2N = 144;
   PeriphClkInitStruct.PLL2.PLL2P = 4;
   PeriphClkInitStruct.PLL2.PLL2Q = 16;
-  PeriphClkInitStruct.PLL2.PLL2R = 30;
+  PeriphClkInitStruct.PLL2.PLL2R = 5;
   PeriphClkInitStruct.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
   PeriphClkInitStruct.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
   PeriphClkInitStruct.PLL2.PLL2FRACN = 0;
   PeriphClkInitStruct.PLL3.PLL3M = 5;
   PeriphClkInitStruct.PLL3.PLL3N = 160;
   PeriphClkInitStruct.PLL3.PLL3P = 5;
-  PeriphClkInitStruct.PLL3.PLL3Q = 2;
+  PeriphClkInitStruct.PLL3.PLL3Q = 16;
   PeriphClkInitStruct.PLL3.PLL3R = 5;
   PeriphClkInitStruct.PLL3.PLL3RGE = RCC_PLL3VCIRANGE_2;
   PeriphClkInitStruct.PLL3.PLL3VCOSEL = RCC_PLL3VCOWIDE;

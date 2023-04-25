@@ -3,6 +3,7 @@
 #include "stdint.h"
 #include "main.h"
 #include "spi.h"
+#include <string.h>
 
 #define CHANNEL_COMMAND  0
 #define CHANNEL_EXECUTABLE  1
@@ -154,39 +155,6 @@ void IMU_enableGyroIntegratedRotationVector(uint16_t timeBetweenReports)
 	IMU_setFeatureCommand(SENSOR_REPORTID_GYRO_INTEGRATED_ROTATION_VECTOR, timeBetweenReports, 0);
 }
 
-void IMU_dataReady()
-{
-    switch (stateCntr)
-    {
-    case 0:
-    case 1:
-    case 3:
-        IMU_receivePacket(280);
-        break;
-    case 4:
-        IMU_enableGyroIntegratedRotationVector(1);
-        break;
-    case 2:
-        shtpTxRawData[4] = SHTP_REPORT_PRODUCT_ID_REQUEST;
-        shtpTxRawData[5] = 0;
-        IMU_sendPacket(CHANNEL_CONTROL, 2);
-        break;
-    default:
-        if(stateCntr > 10)
-        {
-            memset(shtpRxRawData, 0, 25);
-            HAL_SPI_Receive(&hspi2, shtpRxRawData, 25, 1);
-            IMU_decode();
-        }
-        else
-        {
-            IMU_receivePacket(280);
-        }
-        break;
-    }
-    stateCntr++;
-}
-
 uint16_t rawQuatI = 0;
 uint16_t rawQuatJ = 0;
 uint16_t rawQuatK = 0;
@@ -207,7 +175,6 @@ float IMU_qToFloat(int16_t fixedPointValue, uint8_t qPoint)
 	qFloat *= pow(2, qPoint * -1);
 	return (qFloat);
 }
-
 
 void IMU_decode()
 {
@@ -251,6 +218,44 @@ void IMU_decode()
 	roll = atan2(t0, t1) * 180.0f / M_PI;
 
 }
+
+void IMU_dataReady()
+{
+    switch (stateCntr)
+    {
+    case 0:
+    case 1:
+    case 3:
+        IMU_receivePacket(280);
+        break;
+    case 4:
+        IMU_enableGyroIntegratedRotationVector(1);
+        break;
+    case 2:
+        shtpTxRawData[4] = SHTP_REPORT_PRODUCT_ID_REQUEST;
+        shtpTxRawData[5] = 0;
+        IMU_sendPacket(CHANNEL_CONTROL, 2);
+        break;
+    default:
+        if(stateCntr > 10)
+        {
+            memset(shtpRxRawData, 0, 25);
+            HAL_SPI_Receive(&hspi2, shtpRxRawData, 25, 1);
+            IMU_decode();
+        }
+        else
+        {
+            IMU_receivePacket(280);
+        }
+        break;
+    }
+    stateCntr++;
+}
+
+
+
+
+
 
 float IMU_getYaw() { return yaw; }
 float IMU_getPitch() { return pitch; }
