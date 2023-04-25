@@ -60,7 +60,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-struct GRB color[3] = {{0x00,0xFF,0x00}, {0xFF,0x00,0x00}, {0x00,0x00,0xFF}};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -144,10 +144,6 @@ int main(void)
   TemperatureSensor_init();
   SpaceMouse_init();
   BreathingLight_init();
-
-  // test
-  WS2812B_convert(color, 3);
-  WS2812B_send(3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
