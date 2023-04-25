@@ -43,8 +43,13 @@ const uint8_t table[] =
     WS2812B_TX_DATA_111
 };
 
+#ifndef WS2812B_NUM
+#define WS2812B_NUM 3
+#endif
 
-void WS2812B_convert(struct GRB grbArray[], uint16_t nLed, uint8_t* txBuffer)
+__attribute__((section(".D1"))) uint8_t WS2812B_txData[WS2812B_NUM * 8] = {0};
+
+void WS2812B_convert(struct GRB grbArray[], uint16_t nLed)
 {
     for(uint16_t i = 0; i < nLed; i++)
     {
@@ -70,14 +75,15 @@ void WS2812B_convert(struct GRB grbArray[], uint16_t nLed, uint8_t* txBuffer)
 
         for(uint8_t j = 0; j < 8; j++)
         {
-            txBuffer[i * 8 + j] = table[masked[j]];
+            WS2812B_txData[i * 8 + j] = table[masked[j]];
         }
-
     }
-
 }
 
-void WS2812B_send(uint8_t* txBuffer, uint16_t nLed)
+void WS2812B_send(uint16_t nLed)
 {
-    HAL_UART_Transmit(&huart4, txBuffer, nLed * 8, 2);
+    HAL_HalfDuplex_EnableTransmitter(&huart4);
+    HAL_UART_Transmit_DMA(&huart4, WS2812B_txData, nLed * 8);
+    // ATOMIC_SET_BIT((&huart4)->Instance->CR3, USART_CR3_DMAT);
+    // HAL_UART_Transmit_IT(&huart4, WS2812B_txData, nLed * 8);
 }

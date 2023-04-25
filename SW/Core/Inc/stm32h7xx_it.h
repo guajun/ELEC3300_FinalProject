@@ -70,6 +70,7 @@ void SPI2_IRQHandler(void);
 void EXTI15_10_IRQHandler(void);
 void DMA1_Stream7_IRQHandler(void);
 void SDMMC1_IRQHandler(void);
+void UART4_IRQHandler(void);
 void DMA2_Stream1_IRQHandler(void);
 void DMA2_Stream2_IRQHandler(void);
 void DMA2_Stream3_IRQHandler(void);

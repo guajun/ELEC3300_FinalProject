@@ -77,6 +77,7 @@ extern DMA_HandleTypeDef hdma_usart2_rx;
 extern DMA_HandleTypeDef hdma_usart2_tx;
 extern DMA_HandleTypeDef hdma_usart3_rx;
 extern DMA_HandleTypeDef hdma_usart3_tx;
+extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart6;
 /* USER CODE BEGIN EV */
 
@@ -228,7 +229,7 @@ void DMA1_Stream0_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Stream0_IRQn 0 */
 
   /* USER CODE END DMA1_Stream0_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_i2c1_rx);
+  HAL_DMA_IRQHandler(&hdma_uart4_tx);
   /* USER CODE BEGIN DMA1_Stream0_IRQn 1 */
 
   /* USER CODE END DMA1_Stream0_IRQn 1 */
@@ -298,7 +299,7 @@ void DMA1_Stream5_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Stream5_IRQn 0 */
 
   /* USER CODE END DMA1_Stream5_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_uart4_tx);
+  HAL_DMA_IRQHandler(&hdma_i2c1_rx);
   /* USER CODE BEGIN DMA1_Stream5_IRQn 1 */
 
   /* USER CODE END DMA1_Stream5_IRQn 1 */
@@ -428,6 +429,20 @@ void SDMMC1_IRQHandler(void)
   /* USER CODE BEGIN SDMMC1_IRQn 1 */
 
   /* USER CODE END SDMMC1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles UART4 global interrupt.
+  */
+void UART4_IRQHandler(void)
+{
+  /* USER CODE BEGIN UART4_IRQn 0 */
+
+  /* USER CODE END UART4_IRQn 0 */
+  HAL_UART_IRQHandler(&huart4);
+  /* USER CODE BEGIN UART4_IRQn 1 */
+
+  /* USER CODE END UART4_IRQn 1 */
 }
 
 /**
