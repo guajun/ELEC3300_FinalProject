@@ -1,4 +1,6 @@
 #pragma once
 
-void TemperatureSensor_Init();
-float TemperatureSensor_getTemp();
+#include "stdint.h"
+
+void TemperatureSensor_init();
+uint16_t TemperatureSensor_getTemp();

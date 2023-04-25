@@ -37,6 +37,7 @@
 #include "RotaryEncoder.h"
 #include "IMU.h"
 #include "SDCard.h"
+#include "TemperatureSensor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -136,6 +137,7 @@ int main(void)
   RotaryEncoder_init();
   IMU_init();
   SDCard_init();
+  TemperatureSensor_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */

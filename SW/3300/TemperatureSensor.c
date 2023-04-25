@@ -1,20 +1,25 @@
 #include "TemperatureSensor.h"
 
 #include "adc.h"
-uint16_t VValue;
-void TemSensor_compliteCallback(ADC_HandleTypeDef *hadc){
-    VValue = HAL_ADC_GetValue(hadc);
+#include "stdint.h"
+
+#define TEMPERATURE_SENSOR_VREF ((uint16_t)3100)
+
+uint16_t adcData = 0;
+
+void TemperatureSensor_callback(ADC_HandleTypeDef *hadc)
+{
+    adcData = HAL_ADC_GetValue(hadc);
 };
 
-void TemperatureSensor_Init(void)
+void TemperatureSensor_init(void)
 {
-    HAL_ADCEx_Calibration_Start(&hadc3,ADC_CALIB_OFFSET,ADC_SINGLE_ENDED); // Calib
+    HAL_ADCEx_Calibration_Start(&hadc3, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED); // Calib
+    HAL_ADC_RegisterCallback(&hadc3, HAL_ADC_CONVERSION_COMPLETE_CB_ID, TemperatureSensor_callback);
     HAL_ADC_Start_IT(&hadc3);
-    HAL_ADC_RegisterCallback(&hadc3, HAL_ADC_CONVERSION_COMPLETE_CB_ID,TemSensor_compliteCallback);
 }
 
-float TemperatureSensor_getTemp()
+uint16_t TemperatureSensor_getTemp()
 {
-    float Voltage =(float)(VValue *3.3/4096);
-    return ((Voltage-0.76)/0.0025)+25;  // temperature
+    return __HAL_ADC_CALC_TEMPERATURE(TEMPERATURE_SENSOR_VREF, adcData, ADC_RESOLUTION_12B);
 }
