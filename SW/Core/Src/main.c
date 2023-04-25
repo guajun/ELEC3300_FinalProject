@@ -39,6 +39,7 @@
 #include "SDCard.h"
 #include "TemperatureSensor.h"
 #include "SpaceMouse.h"
+#include "BreathingLight.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -140,6 +141,7 @@ int main(void)
   SDCard_init();
   TemperatureSensor_init();
   SpaceMouse_init();
+  BreathingLight_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -150,6 +152,7 @@ int main(void)
     MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
+    BreathingLight_update();
   }
   /* USER CODE END 3 */
 }
