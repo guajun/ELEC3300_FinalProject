@@ -38,6 +38,7 @@
 #include "IMU.h"
 #include "SDCard.h"
 #include "TemperatureSensor.h"
+#include "SpaceMouse.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -138,6 +139,7 @@ int main(void)
   IMU_init();
   SDCard_init();
   TemperatureSensor_init();
+  SpaceMouse_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
