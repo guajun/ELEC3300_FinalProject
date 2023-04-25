@@ -1,9 +1,16 @@
 #pragma once
 
-// void ZeroPosition_Set();
-// void AutoData_On();
-// void AutoData_Off();
-// void RequestData_Send(uint8_t* RecByteArray);
-// uint16_t AxisValue_get(char a);
-
+#include "stdint.h"
 void SpaceMouse_init();
+
+struct SpaceMouse_RxData
+{
+    uint8_t isConnected;
+    int16_t x;
+    int16_t y;
+    int16_t z;
+    int16_t a;
+    int16_t b;
+    int16_t c;
+};
+extern struct SpaceMouse_RxData SpaceMouse_rxData;
