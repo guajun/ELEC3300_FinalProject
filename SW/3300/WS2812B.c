@@ -3,14 +3,14 @@
 #include "stdint.h"
 #include "usart.h"
 
-#define WS2812B_TX_DATA_000 ((uint8_t)0b0100100)
-#define WS2812B_TX_DATA_001 ((uint8_t)0b0100101)
-#define WS2812B_TX_DATA_010 ((uint8_t)0b0101100)
-#define WS2812B_TX_DATA_011 ((uint8_t)0b0101101)
-#define WS2812B_TX_DATA_100 ((uint8_t)0b1100100)
-#define WS2812B_TX_DATA_101 ((uint8_t)0b1100101)
-#define WS2812B_TX_DATA_110 ((uint8_t)0b1101100)
-#define WS2812B_TX_DATA_111 ((uint8_t)0b1101101)
+#define WS2812B_TX_DATA_000 ((uint8_t)0b1101101)
+#define WS2812B_TX_DATA_001 ((uint8_t)0b1101100)
+#define WS2812B_TX_DATA_010 ((uint8_t)0b1100101)
+#define WS2812B_TX_DATA_011 ((uint8_t)0b1100100)
+#define WS2812B_TX_DATA_100 ((uint8_t)0b0101101)
+#define WS2812B_TX_DATA_101 ((uint8_t)0b0101100)
+#define WS2812B_TX_DATA_110 ((uint8_t)0b0100101)
+#define WS2812B_TX_DATA_111 ((uint8_t)0b0100100)
 
 #define WS2812B_BIT_MASK_0 ((uint32_t)0b111)
 #define WS2812B_BIT_MASK_1 (((uint32_t)0b111) << 3)
@@ -49,9 +49,9 @@ void WS2812B_convert(struct GRB grbArray[], uint16_t nLed, uint8_t* txBuffer)
     for(uint16_t i = 0; i < nLed; i++)
     {
         static uint32_t grb = 0; 
-        static uint8_t* grb_g = (uint8_t*)&grb;
+        static uint8_t* grb_g = (uint8_t*)&grb + 2;
         static uint8_t* grb_r = (uint8_t*)&grb + 1;
-        static uint8_t* grb_b = (uint8_t*)&grb + 2;
+        static uint8_t* grb_b = (uint8_t*)&grb;
 
         *grb_g = grbArray[i].g;
         *grb_r = grbArray[i].r;
@@ -76,8 +76,6 @@ void WS2812B_convert(struct GRB grbArray[], uint16_t nLed, uint8_t* txBuffer)
     }
 
 }
-
-//{}
 
 void WS2812B_send(uint8_t* txBuffer, uint16_t nLed)
 {

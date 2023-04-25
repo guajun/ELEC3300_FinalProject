@@ -61,8 +61,7 @@
 
 /* USER CODE BEGIN PV */
 uint8_t ledTxBuffer[24] = {};
-struct GRB color[3] = {{0xFF,0x00,0x00}, {0x00,0xFF,0x00}, {0x00,0x00,0xFF}};
-uint32_t encoder = 0;
+struct GRB color[3] = {{0x77,0x00,0x00}, {0x00,0x77,0x00}, {0x00,0x00,0x77}};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
