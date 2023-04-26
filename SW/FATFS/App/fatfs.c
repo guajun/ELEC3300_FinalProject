@@ -15,6 +15,7 @@
   *
   ******************************************************************************
   */
+#ifdef NEVER_DEFINE_THIS
 /* USER CODE END Header */
 #include "fatfs.h"
 
@@ -24,6 +25,15 @@ FATFS SDFatFS;    /* File system object for SD logical drive */
 FIL SDFile;       /* File object for SD */
 
 /* USER CODE BEGIN Variables */
+#endif
+
+// Fuck DTCRAM
+#include "fatfs.h"
+
+uint8_t retSD;    /* Return value for SD */
+char SDPath[4];   /* SD logical drive path */
+__attribute__((section(".D1"))) FATFS SDFatFS;    /* File system object for SD logical drive */
+__attribute__((section(".D1"))) FIL SDFile;       /* File object for SD */
 
 /* USER CODE END Variables */
 

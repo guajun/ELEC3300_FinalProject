@@ -6,7 +6,7 @@
 
 FRESULT res; /* FatFs function common result code */
 uint32_t byteswritten;
-uint8_t wtext[] = "STM32 FATFS works great!";
+__attribute__((section(".D1"))) uint8_t wtext[] = "STM32 FATFS works great!";
 
 
 void SDCard_init()
