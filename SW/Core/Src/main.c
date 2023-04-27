@@ -143,7 +143,7 @@ int main(void)
   SpaceMouse_init();
   BreathingLight_init();
   WAVPlayer_init();
-  WAVPlayer_play();
+  // WAVPlayer_play();
   /* USER CODE END 2 */
 
   /* Infinite loop */
