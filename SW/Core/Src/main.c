@@ -139,7 +139,6 @@ int main(void)
   /* USER CODE BEGIN 2 */
   RotaryEncoder_init();
   IMU_init();
-  // SDCard_init();
   TemperatureSensor_init();
   SpaceMouse_init();
   BreathingLight_init();
