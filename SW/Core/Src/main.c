@@ -21,7 +21,6 @@
 #include "adc.h"
 #include "crc.h"
 #include "dma.h"
-#include "fatfs.h"
 #include "fdcan.h"
 #include "i2c.h"
 #include "i2s.h"
@@ -41,6 +40,7 @@
 #include "SpaceMouse.h"
 #include "BreathingLight.h"
 #include "WS2812B.h"
+#include "WAVPlayer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -134,16 +134,17 @@ int main(void)
   MX_UART7_Init();
   MX_UART4_Init();
   MX_UART8_IRDA_Init();
-  MX_FATFS_Init();
   MX_ADC3_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   RotaryEncoder_init();
   IMU_init();
-  SDCard_init();
+  // SDCard_init();
   TemperatureSensor_init();
   SpaceMouse_init();
   BreathingLight_init();
+  WAVPlayer_init();
+  WAVPlayer_play();
   /* USER CODE END 2 */
 
   /* Infinite loop */
