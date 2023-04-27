@@ -16,10 +16,10 @@ __attribute__((section(".D1"))) uint8_t WAVPlayer_txData[WAV_PLAYER_BUFFER_SIZE]
 __attribute__((section(".D1"))) uint8_t WAVPlayer_txData2[WAV_PLAYER_BUFFER_SIZE] = {};
 
 
-uint8_t currentBuffer = 0;
+// uint8_t currentBuffer = 0;
 
-uint32_t fileBytesRead = 0;
-uint32_t * pFileBytesRead = &fileBytesRead;
+// uint32_t fileBytesRead = 0;
+// uint32_t * pFileBytesRead = &fileBytesRead;
 
 uint32_t WAVPlayer_readIndex = SONG_1_BLOCK_ADDRESS;
 uint32_t WAVPlayer_dataSize = 0;
@@ -32,28 +32,24 @@ void getBuffer(uint8_t * buffer)
     WAVPlayer_readIndex += WAV_PLAYER_BLOCK_NBR;
 }
 
+void checkLength()
+{
+    if(WAVPlayer_dataSize < (WAVPlayer_readIndex << 9) )
+    {
+        HAL_I2S_DMAStop(&hi2s1);
+    }
+}
+
 static void WAVPlayer_i2sM0TxCpltCallback(DMA_HandleTypeDef *hdma)
 {
     getBuffer(WAVPlayer_txData2);
+    checkLength();
 }
 
 static void WAVPlayer_i2sM1TxCpltCallback(DMA_HandleTypeDef *hdma)
 {
-    // currentBuffer = !currentBuffer;
-    // if(currentBuffer)
-    // {
-    //     // send 2, write 1
-    //     // HAL_I2S_Transmit_DMA(&hi2s1, (uint16_t *)WAVPlayer_txData2, WAV_PLAYER_BUFFER_SIZE << 1);
-    //     getBuffer(WAVPlayer_txData);
-    // }
-    // else
-    // {
-    //     // send 1, write 2
-    //     // HAL_I2S_Transmit_DMA(&hi2s1, (uint16_t *)WAVPlayer_txData, WAV_PLAYER_BUFFER_SIZE << 1);
-    //     getBuffer(WAVPlayer_txData2);
-    // }
-
     getBuffer(WAVPlayer_txData);
+    checkLength();
 }
 
 /**
@@ -186,19 +182,21 @@ HAL_StatusTypeDef HAL_I2S_Transmit_DMA_Doublebuffer(I2S_HandleTypeDef *hi2s, uin
 
 void WAVPlayer_i2sInitTxCpltCallback(I2S_HandleTypeDef *hi2s)
 {
-    currentBuffer = !currentBuffer;
-    if(currentBuffer)
-    {
-        // send 2, write 1
-        HAL_I2S_Transmit_DMA(&hi2s1, (uint16_t *)WAVPlayer_txData2, WAV_PLAYER_BUFFER_SIZE >> 1);
-        getBuffer(WAVPlayer_txData);
-    }
-    else
-    {
-        // send 1, write 2
-        HAL_I2S_Transmit_DMA(&hi2s1, (uint16_t *)WAVPlayer_txData, WAV_PLAYER_BUFFER_SIZE >> 1);
-        getBuffer(WAVPlayer_txData2);
-    }
+    // currentBuffer = !currentBuffer;
+    // if(currentBuffer)
+    // {
+    //     // send 2, write 1
+    //     HAL_I2S_Transmit_DMA(&hi2s1, (uint16_t *)WAVPlayer_txData2, WAV_PLAYER_BUFFER_SIZE >> 1);
+    //     getBuffer(WAVPlayer_txData);
+    // }
+    // else
+    // {
+    //     // send 1, write 2
+    //     HAL_I2S_Transmit_DMA(&hi2s1, (uint16_t *)WAVPlayer_txData, WAV_PLAYER_BUFFER_SIZE >> 1);
+    //     getBuffer(WAVPlayer_txData2);
+    // }
+
+    HAL_I2S_Transmit_DMA_Doublebuffer(&hi2s1, (uint16_t *)WAVPlayer_txData2, (uint16_t *)WAVPlayer_txData, WAV_PLAYER_BUFFER_SIZE >> 1);
 }
 
 void WAVPlayer_sdRxCpltCallback(SD_HandleTypeDef *hsd)
@@ -227,6 +225,6 @@ void WAVPlayer_init()
 void WAVPlayer_play()
 {
     HAL_I2S_DMAStop(&hi2s1);
-    currentBuffer = 0;
+    // currentBuffer = 0;
     getBuffer(WAVPlayer_txData);
 }
