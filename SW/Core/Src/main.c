@@ -35,7 +35,6 @@
 /* USER CODE BEGIN Includes */
 #include "RotaryEncoder.h"
 #include "IMU.h"
-#include "SDCard.h"
 #include "TemperatureSensor.h"
 #include "SpaceMouse.h"
 #include "BreathingLight.h"
