@@ -78,6 +78,7 @@ void Error_Handler(void);
 #define SD_DET_GPIO_Port GPIOD
 #define ENCODER_K_Pin GPIO_PIN_7
 #define ENCODER_K_GPIO_Port GPIOD
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

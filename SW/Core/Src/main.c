@@ -110,9 +110,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_FDCAN1_Init();
   MX_FDCAN2_Init();
-  MX_DMA_Init();
   MX_SDMMC1_SD_Init();
   MX_I2C1_Init();
   MX_I2S1_Init();
@@ -182,10 +182,6 @@ void SystemClock_Config(void)
 
   while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
 
-  /** Macro to configure the PLL clock source
-  */
-  __HAL_RCC_PLL_PLLSOURCE_CONFIG(RCC_PLLSOURCE_HSE);
-
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
@@ -240,7 +236,7 @@ void PeriphCommonClock_Config(void)
   PeriphClkInitStruct.PLL3.PLL3N = 96;
   PeriphClkInitStruct.PLL3.PLL3P = 10;
   PeriphClkInitStruct.PLL3.PLL3Q = 10;
-  PeriphClkInitStruct.PLL3.PLL3R = 3;
+  PeriphClkInitStruct.PLL3.PLL3R = 6;
   PeriphClkInitStruct.PLL3.PLL3RGE = RCC_PLL3VCIRANGE_2;
   PeriphClkInitStruct.PLL3.PLL3VCOSEL = RCC_PLL3VCOWIDE;
   PeriphClkInitStruct.PLL3.PLL3FRACN = 0;
