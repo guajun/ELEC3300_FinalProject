@@ -68,6 +68,7 @@ void FDCAN1_IT1_IRQHandler(void);
 void FDCAN2_IT1_IRQHandler(void);
 void SPI1_IRQHandler(void);
 void SPI2_IRQHandler(void);
+void USART2_IRQHandler(void);
 void EXTI15_10_IRQHandler(void);
 void DMA1_Stream7_IRQHandler(void);
 void SDMMC1_IRQHandler(void);
