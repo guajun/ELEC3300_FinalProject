@@ -41,6 +41,8 @@
 #include "WS2812B.h"
 #include "WAVPlayer.h"
 #include "GO_M8010_6.h"
+#include "DM4310.h"
+#include "OS.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -143,8 +145,11 @@ int main(void)
   SpaceMouse_init();
   BreathingLight_init();
   WAVPlayer_init();
+  DM4310_init();
   // GO_M8010_6_init();
   // WAVPlayer_play();
+
+  OS_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
