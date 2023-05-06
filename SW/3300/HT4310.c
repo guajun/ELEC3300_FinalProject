@@ -1,9 +1,12 @@
 #include "HT4310.h"
+
 #include "stdint.h"
 #include "fdcan.h"
 
 FDCAN_TxHeaderTypeDef HT4310_txHeader = {
         0x001, FDCAN_STANDARD_ID, FDCAN_DATA_FRAME, FDCAN_DLC_BYTES_8, FDCAN_ESI_PASSIVE, FDCAN_BRS_OFF, FDCAN_CLASSIC_CAN, FDCAN_NO_TX_EVENTS, 0};
+
+HT4310 HT4310_insts[HT4310_NUM];
 
 static void rxFifoCallback(FDCAN_HandleTypeDef *hfdcan, uint32_t rxFifo0ITs)
 {
@@ -26,7 +29,7 @@ void HT4310_update()
             uint8_t txData[8] = {};
             HT4310_txHeader.Identifier = (0x21 << 4) | (HT4310_insts[i].motorID); // Reset pos
             HT4310_txHeader.DataLength = FDCAN_DLC_BYTES_0;
-            HAL_FDCAN_AdHTessageToTxFifoQ(&hfdcan1, &HT4310_txHeader, txData);
+            HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &HT4310_txHeader, txData);
             HT4310_insts[i].state = HT4310_RUNNING;
 
         case HT4310_RUNNING:
@@ -38,7 +41,7 @@ void HT4310_update()
             txData[2] = *((uint8_t *)&HT4310_insts[i].control.position + 2);
             txData[3] = *((uint8_t *)&HT4310_insts[i].control.position + 3);
 
-            HAL_FDCAN_AdHTessageToTxFifoQ(&hfdcan1, &HT4310_txHeader, txData);
+            HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &HT4310_txHeader, txData);
             break;
         default:
             break;

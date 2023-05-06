@@ -43,6 +43,8 @@
 #include "GO_M8010_6.h"
 #include "DM4310.h"
 #include "OS.h"
+#include "LCD.h"
+#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -146,6 +148,7 @@ int main(void)
   BreathingLight_init();
   WAVPlayer_init();
   DM4310_init();
+  LCD_init();
   // GO_M8010_6_init();
   // WAVPlayer_play();
 
@@ -161,6 +164,10 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     BreathingLight_update();
+
+    // char text[16] = {};
+    // sprintf((char *)&text, "%d", HAL_GetTick());
+    // LCD_ShowString(4, 40, ST7735Ctx.Width, 16, 16, text);
   }
   /* USER CODE END 3 */
 }

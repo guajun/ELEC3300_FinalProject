@@ -101,6 +101,8 @@ Core/Src/dma.c
 
 C_SOURCES += $(wildcard 3300/*.c) 
 
+C_SOURCES += $(wildcard 3300/st7735/*.c) 
+
 # ASM sources
 ASM_SOURCES =  \
 startup_stm32h743xx.s
@@ -165,7 +167,8 @@ C_INCLUDES =  \
 -IMiddlewares/ST/STM32_USB_Host_Library/Class/HID/Inc \
 -IDrivers/CMSIS/Device/ST/STM32H7xx/Include \
 -IDrivers/CMSIS/Include \
--I3300
+-I3300 \
+-I3300/st7735
 
 
 # compile gcc flags
