@@ -58,3 +58,5 @@ typedef struct
 
 extern DM4310 DM4310_insts[DM4310_NUM];
 
+void DM4310_update();
+void DM4310_init();
