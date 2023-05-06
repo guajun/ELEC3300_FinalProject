@@ -13,6 +13,7 @@ static void thread(TIM_HandleTypeDef *htim)
     lastTick = HAL_GetTick();
 
     DM4310_update();
+    HT4310_update();
 }
 
 void OS_init()
