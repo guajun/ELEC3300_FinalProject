@@ -11,6 +11,8 @@
 // extern const uint8_t HID_KEYBRD_Codes[];
 // extern const uint8_t HID_KEYBRD_Key[];
 
+uint8_t imuMotorCtr = 0;
+
 struct Keys keys;
 
 void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
@@ -76,6 +78,11 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 			case KEY_H:
 				keyBits |= 1 << 11;
 				break;
+
+			case KEY_L:
+				keyBits |= 1 << 12;
+				break;
+			
 			default:
 				break;
 			}
@@ -93,6 +100,15 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 		keys.F =  !!(keyBits & (1 << 9));
 		keys.G =  !!(keyBits & (1 << 10));
 		keys.H =  !!(keyBits & (1 << 11));
+		keys.L =  !!(keyBits & (1 << 12));
+
+		if(keys.L)
+		{
+			imuMotorCtr = !imuMotorCtr;
+		}
 	}
+
+
+
 }
 

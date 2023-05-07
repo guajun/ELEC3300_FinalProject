@@ -1,3 +1,7 @@
+#pragma once
+
+#include "stdint.h"
+
 enum Key_State
 {
     KEY_STATE_PRESSED = 1,
@@ -20,4 +24,8 @@ extern struct Keys
     enum Key_State G;
     enum Key_State H;
 
+    enum Key_State L;
+
 }keys;
+
+extern uint8_t imuMotorCtr;

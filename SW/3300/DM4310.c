@@ -26,25 +26,7 @@ static void rxFifoCallback(FDCAN_HandleTypeDef *hfdcan, uint32_t rxFifo0ITs)
     {
         uint8_t rxData[8];
         static FDCAN_RxHeaderTypeDef rxHeader;
-        HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxHeader, rxData);
-
-        // static uint32_t counter = 0;
-        // static uint32_t counter1 = 0;
-
-        // switch (rxData[0] & 0xF)
-        // {
-        // case 1:
-        //     counter++;
-        //     break;
-        // case 2:
-        //     counter1++;
-        //     break;
-        // default:
-        //     break;
-        // }
-
-        // memcpy(DM4310_insts[(rxData[0] & 0xF) - 1].rxData, rxData, 8);
-            
+        HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxHeader, rxData);  
     }
 }
 
@@ -87,6 +69,9 @@ void DM4310_init()
 {
     DM4310_insts[0].motorID = 1;
     DM4310_insts[1].motorID = 2;
+
+    DM4310_insts[0].control.rpm = 2;
+    DM4310_insts[1].control.rpm = 2;
 
     FDCAN_FilterTypeDef filter =   {FDCAN_STANDARD_ID,
                                     FDCAN_DATA_FRAME,
