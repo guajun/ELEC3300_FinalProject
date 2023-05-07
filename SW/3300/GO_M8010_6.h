@@ -62,21 +62,6 @@ typedef struct
 #pragma pack()
 
 
-// typedef struct 
-// {
-//     // volatile float rpm;
-//     // volatile float position; 
-//     // volatile float torque;
-//     // volatile uint8_t rotorTemperature;
-//     // volatile uint8_t mosTemperature;
-
-// } GO_M8010_6_Feedback;
-
-// typedef struct 
-// {
-//     volatile int32_t position;
-// }GO_M8010_6_Control;
-
 typedef struct 
 {
     float tarTor;
@@ -95,7 +80,7 @@ typedef struct
     GO_M8010_6_Control control;
     GO_M8010_6_Feedback feedback;
     // uint8_t txData[17];
-    enum GO_M8010_6_State state;
+    // enum GO_M8010_6_State state;
     uint8_t motorID; // Not CAN ID
 } GO_M8010_6;
 

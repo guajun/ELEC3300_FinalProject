@@ -13,6 +13,7 @@
 
 
 uint8_t currentMotorIndex = 0;
+enum GO_M8010_6_State GO_M8010_6_state;
 GO_M8010_6 GO_M8010_6_insts[GO_M8010_6_NUM];
 
 static const uint32_t crc_table[256] = {
@@ -50,7 +51,6 @@ static const uint32_t crc_table[256] = {
     0x7bc7, 0x6a4e, 0x58d5, 0x495c, 0x3de3, 0x2c6a, 0x1ef1, 0x0f78,
 };
 
-
 uint16_t do_crc_table(uint8_t *ptr, int len)
 {
     uint16_t crc = 0x0000;
@@ -62,6 +62,7 @@ uint16_t do_crc_table(uint8_t *ptr, int len)
     
     return crc;
 }
+
 static void transmit(GO_M8010_6 * motor)
 {
     motor->control.command.tor_des = motor->tarTor * 256;
@@ -74,7 +75,6 @@ static void transmit(GO_M8010_6 * motor)
     motor->control.CRC16 = do_crc_table((uint8_t *)&(motor->control), 15);
 
     HAL_UART_Transmit_DMA(&huart2, (uint8_t *)&(motor->control), 17);
-
 }
 
 static void txCallback(UART_HandleTypeDef* huart)
@@ -107,6 +107,20 @@ static void rxCallback(UART_HandleTypeDef* huart)
         GO_M8010_6_insts[1].w = GO_M8010_6_insts[1].feedback.speed * M_PI / 128 / 6.33;
         GO_M8010_6_insts[1].pos = GO_M8010_6_insts[1].feedback.pos * M_PI / 16384 / 6.33;
         GO_M8010_6_insts[1].temperature = GO_M8010_6_insts[1].feedback.temp;
+
+        if(GO_M8010_6_state == GO_M8010_6_INIT)
+        {
+            // init all parameter
+            // GO_M8010_6_insts[0].tarPos = GO_M8010_6_insts[0].pos;
+            // GO_M8010_6_insts[0].kPos = 0.9;
+            // GO_M8010_6_insts[0].kSpeed = 0.2;
+
+            GO_M8010_6_insts[1].tarPos = GO_M8010_6_insts[1].pos;
+            GO_M8010_6_insts[1].kPos = 0.9;
+            GO_M8010_6_insts[1].kSpeed = 0.2;
+
+            GO_M8010_6_state = GO_M8010_6_RUNNING;
+        }
     }
 }
 
