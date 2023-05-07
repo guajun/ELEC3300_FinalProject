@@ -45,6 +45,8 @@
 #include "OS.h"
 #include "LCD.h"
 #include "string.h"
+#include "HT4310.h"
+#include "DM4310.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -147,8 +149,11 @@ int main(void)
   SpaceMouse_init();
   BreathingLight_init();
   WAVPlayer_init();
+  HAL_Delay(2000);
   DM4310_init();
+  HT4310_init();
   LCD_init();
+
   // GO_M8010_6_init();
   // WAVPlayer_play();
 

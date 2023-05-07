@@ -39,13 +39,13 @@ void DM4310_update()
         case DM4310_INIT:
 
             uint8_t enableTxData[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFC};
-            DM4310_txHeader.Identifier = 0x100 + 0x001 + DM4310_insts[i].motorID;
+            DM4310_txHeader.Identifier = 0x100 + DM4310_insts[i].motorID;
             HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &DM4310_txHeader, enableTxData);
             DM4310_insts[i].state = DM4310_RUNNING;
 
         case DM4310_RUNNING:
             uint8_t txData[8] = {};
-            DM4310_txHeader.Identifier = 0x100 + 0x001 + DM4310_insts[i].motorID;
+            DM4310_txHeader.Identifier = 0x100 + DM4310_insts[i].motorID;
 
             txData[0] = *((uint8_t *)&DM4310_insts[i].control.position);
             txData[1] = *((uint8_t *)&DM4310_insts[i].control.position + 1);
@@ -67,8 +67,8 @@ void DM4310_update()
 
 void DM4310_init()
 {
-    DM4310_insts[0].motorID = 0;
-    DM4310_insts[1].motorID = 1;
+    DM4310_insts[0].motorID = 1;
+    DM4310_insts[1].motorID = 2;
 
     FDCAN_FilterTypeDef filter =   {FDCAN_STANDARD_ID,
                                     FDCAN_DATA_FRAME,

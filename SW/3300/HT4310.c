@@ -29,7 +29,7 @@ void HT4310_update()
             uint8_t txData[8] = {};
             HT4310_txHeader.Identifier = (0x21 << 4) | (HT4310_insts[i].motorID); // Reset pos
             HT4310_txHeader.DataLength = FDCAN_DLC_BYTES_0;
-            HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &HT4310_txHeader, txData);
+            HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &HT4310_txHeader, txData);
             HT4310_insts[i].state = HT4310_RUNNING;
 
         case HT4310_RUNNING:
@@ -41,7 +41,7 @@ void HT4310_update()
             txData[2] = *((uint8_t *)&HT4310_insts[i].control.position + 2);
             txData[3] = *((uint8_t *)&HT4310_insts[i].control.position + 3);
 
-            HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &HT4310_txHeader, txData);
+            HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &HT4310_txHeader, txData);
             break;
         default:
             break;
