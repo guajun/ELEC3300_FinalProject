@@ -1,7 +1,7 @@
 enum Key_State
 {
-    KEY_STATE_PRESSED = 0,
-    KEY_STATE_RELEASED = 1
+    KEY_STATE_PRESSED = 1,
+    KEY_STATE_RELEASED = 0
 };
 
 extern struct Keys
