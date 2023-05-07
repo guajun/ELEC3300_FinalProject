@@ -111,7 +111,7 @@ void LCD_init(void)
 
 
 	sprintf((char *)&text, "ELEC 3300");
-	LCD_ShowString(4, 40, ST7735Ctx.Width, 16, 16, text);
+	LCD_ShowString(0, 0, ST7735Ctx.Width, 16, 12, text);
 }
 
 void LCD_SetBrightness(uint32_t Brightness)

@@ -87,3 +87,4 @@ void WS2812B_send(uint16_t nLed)
     // ATOMIC_SET_BIT((&huart4)->Instance->CR3, USART_CR3_DMAT);
     // HAL_UART_Transmit_IT(&huart4, WS2812B_txData, nLed * 8);
 }
+

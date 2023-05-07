@@ -64,7 +64,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-
+struct GRB grbArray[15];
+uint32_t localTick = 0;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -149,7 +150,7 @@ int main(void)
   SpaceMouse_init();
   BreathingLight_init();
   WAVPlayer_init();
-  HAL_Delay(2000);
+  HAL_Delay(1000);
   DM4310_init();
   HT4310_init();
   LCD_init();
@@ -169,10 +170,57 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     BreathingLight_update();
+    uint32_t encoder = RotaryEncoder_read();
 
-    // char text[16] = {};
-    // sprintf((char *)&text, "%d", HAL_GetTick());
-    // LCD_ShowString(4, 40, ST7735Ctx.Width, 16, 16, text);
+    char text[11] = "";
+    memset(text, ' ', 10);
+    sprintf(text, "%10u", encoder);
+    LCD_ShowString(0, 16, ST7735Ctx.Width, 16, 12, text);
+
+
+    if(localTick % 25)
+    {
+      uint16_t gx = (HAL_GetTick() >> 2) % 768;
+      uint16_t rx = ((HAL_GetTick() >> 2) + 768 / 3) % 768;
+      uint16_t bx = ((HAL_GetTick() >> 2) + 768 * 2 / 3) % 768;
+
+      uint8_t g = gx < 256 ? gx : gx < 512 ? 255 : 768 - 1 - gx;
+      uint8_t r = rx < 256 ? rx : rx < 512 ? 255 : 768 - 1 - rx;
+      uint8_t b = bx < 256 ? bx : bx < 512 ? 255 : 768 - 1 - bx;
+
+
+      uint32_t num = encoder >> 2;
+
+      if((int)encoder < 0)
+      {
+        num = 0;
+      }
+      else if(num > 15)
+      {
+        num = 15;
+      }
+
+      for(uint8_t i = 0; i < 15; ++i)
+      {
+        if(i < num)
+        {
+          grbArray[i].g = g;
+          grbArray[i].r = r;
+          grbArray[i].b = b;
+        }
+        else
+        {
+          grbArray[i].g = 0;
+          grbArray[i].r = 0;
+          grbArray[i].b = 0;
+        }
+      }
+
+      WS2812B_convert(grbArray, 15);
+      WS2812B_send(15);
+    }
+
+    localTick++;
   }
   /* USER CODE END 3 */
 }
