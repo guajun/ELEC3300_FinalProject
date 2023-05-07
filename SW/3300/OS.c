@@ -3,6 +3,7 @@
 #include "DM4310.h"
 #include "HT4310.h"
 #include "stdint.h"
+#include "GO_M8010_6.h"
 
 float OS_tickFreq = 0;
 
@@ -15,6 +16,7 @@ static void thread(TIM_HandleTypeDef *htim)
 
     DM4310_update();
     HT4310_update();
+    GO_M8010_6_update();
 }
 
 void OS_init()

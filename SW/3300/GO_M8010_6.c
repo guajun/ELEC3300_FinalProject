@@ -3,62 +3,17 @@
 #include "crc.h"
 #include "usart.h"
 #include "stdint.h"
+#include "string.h"
 
-__attribute__((section(".D1"))) uint8_t GO_M8010_6_txData[17] = {0};
-__attribute__((section(".D1"))) uint8_t GO_M8010_6_rxData[17] = {0};
-
-typedef struct __packed     // __attribute__((packed)) <- c++
-{
-    uint8_t id     :4;      // 电机ID: 0,1...,14 15表示向所有电机广播数据(此时无返回)
-    uint8_t status :3;      // 工作模式: 0.锁定 1.FOC闭环 2.编码器校准 3.保留
-    uint8_t none   :1;      // 保留位
-} RIS_Mode_t /*__attribute__((packed))*/;   // 控制模式 1Byte
-
-typedef struct
-{
-    int16_t tor_des;        // 期望关节输出扭矩 unit: N.m     (q8)
-    int16_t spd_des;        // 期望关节输出速度 unit: rad/s   (q7)
-    int32_t pos_des;        // 期望关节输出位置 unit: rad     (q15)
-    uint16_t  k_pos;        // 期望关节刚度系数 unit: 0.0-1.0 (q15)
-    uint16_t  k_spd;        // 期望关节阻尼系数 unit: 0.0-1.0 (q15)
-    
-} RIS_Comd_t;   // 控制参数 12Byte
-
-/**
- * @brief 控制数据包格式
- * 
- */
-typedef struct
-{
-    uint8_t head[2];    // 包头         2Byte
-    RIS_Mode_t mode;    // 电机控制模式  1Byte
-    RIS_Comd_t comd;    // 电机期望数据 12Byte
-    uint16_t   CRC16;   // CRC          2Byte
-
-} ControlData_t;    // 主机控制命令     17Byte
-
-typedef struct {              
-        unsigned short id;              // 电机ID，0xBB代表全部电机
-        unsigned short mode;            // 0:空闲, 5:开环转动, 10:闭环FOC控制
-        uint16_t correct;               // 接收数据是否完整 （1 完整，0不完整）
-        int MError;                     // 错误码 0.正常 1.过热 2.过流 3.过压 4.编码器故障
-        int Temp;                       // 温度
-        float tar_pos;                  // target position 
-        float tar_w;                    // target speed
-        float T;                        // 当前实际电机输出力矩
-        float W;                        // 当前实际电机速度（高速）
-        float Pos;                      // 当前电机位置
-        int footForce;                  // They dont even know what 7 is this so we dont update this
-        uint8_t buffer[17];
-        uint8_t Rec_buffer[16];
-        ControlData_t  motor_send_data;  
-}GO_Motorfield;
+#define M_PI		3.14159265358979323846
+#define M_PI_2		1.57079632679489661923
+#define M_PI_4		0.78539816339744830962
+#define M_1_PI		0.31830988618379067154
+#define M_2_PI		0.63661977236758134308
 
 
-enum GO_M8010_6_State
-{
-    INIT
-};
+uint8_t currentMotorIndex = 0;
+GO_M8010_6 GO_M8010_6_insts[GO_M8010_6_NUM];
 
 static const uint32_t crc_table[256] = {
     0x0000, 0x1189, 0x2312, 0x329b, 0x4624, 0x57ad, 0x6536, 0x74bf,
@@ -107,49 +62,75 @@ uint16_t do_crc_table(uint8_t *ptr, int len)
     
     return crc;
 }
+static void transmit(GO_M8010_6 * motor)
+{
+    motor->control.command.tor_des = motor->tarTor * 256;
+    motor->control.command.spd_des = motor->tarW * 128 * 6.33 / M_PI;
+    motor->control.command.pos_des = motor->tarPos * 16384  * 6.33 / M_PI;
 
+    motor->control.command.k_pos = motor->kPos * 1280;
+    motor->control.command.k_spd = motor->kSpeed * 1280;
+
+    motor->control.CRC16 = do_crc_table((uint8_t *)&(motor->control), 15);
+
+    HAL_UART_Transmit_DMA(&huart2, (uint8_t *)&(motor->control), 17);
+
+}
 
 static void txCallback(UART_HandleTypeDef* huart)
 {
-    HAL_UART_Receive_DMA(&huart2, GO_M8010_6_rxData, 17);
+    if(currentMotorIndex)
+    {
+        HAL_UART_Receive_DMA(&huart2, (uint8_t *)&GO_M8010_6_insts[1].feedback, 16);
+    }
+    else
+    {   
+        HAL_UART_Receive_DMA(&huart2, (uint8_t *)&GO_M8010_6_insts[0].feedback, 16);
+    }
 }
 
 static void rxCallback(UART_HandleTypeDef* huart)
 {
-    // HAL_UART_Receive_DMA(&huart2, GO_M8010_6_rxData, 17);
+    if(!currentMotorIndex)
+    {
+        transmit(&GO_M8010_6_insts[1]);
+        currentMotorIndex = 1;
+
+        GO_M8010_6_insts[0].torque = (float)GO_M8010_6_insts[0].feedback.torque / 256;
+        GO_M8010_6_insts[0].w = GO_M8010_6_insts[0].feedback.speed * M_PI / 128 / 6.33;
+        GO_M8010_6_insts[0].pos = GO_M8010_6_insts[0].feedback.pos * M_PI / 16384 / 6.33;
+        GO_M8010_6_insts[0].temperature = GO_M8010_6_insts[0].feedback.temp;
+    }
+    else
+    {
+        GO_M8010_6_insts[1].torque = (float)GO_M8010_6_insts[1].feedback.torque / 256;
+        GO_M8010_6_insts[1].w = GO_M8010_6_insts[1].feedback.speed * M_PI / 128 / 6.33;
+        GO_M8010_6_insts[1].pos = GO_M8010_6_insts[1].feedback.pos * M_PI / 16384 / 6.33;
+        GO_M8010_6_insts[1].temperature = GO_M8010_6_insts[1].feedback.temp;
+    }
 }
+
 
 void GO_M8010_6_init()
 {
-    // HAL_UART_RegisterRxEventCallback(&huart2, rxCallback);
+
     HAL_UART_RegisterCallback(&huart2, HAL_UART_TX_COMPLETE_CB_ID, txCallback);
     HAL_UART_RegisterCallback(&huart2, HAL_UART_RX_COMPLETE_CB_ID, rxCallback);
-    // HAL_UART_Receive_DMA(&huart2, GO_M8010_6_rxData, 16);
 
+    for(uint8_t i = 0; i < GO_M8010_6_NUM; ++i)
+    {
+        GO_M8010_6_insts[i].control.head[0] = 0xFE;
+        GO_M8010_6_insts[i].control.head[1] = 0xEE;
 
-    // HAL_CRC_Calculate(&hcrc, GO_M8010_6_txData, 17);
-
-    // HAL_UART_DECon
-
-    // HAL_UART_Receive_DMA(&huart3, GO_M8010_6_rxData, 17);
-
-    static uint16_t crc;
-    static uint16_t table;
-    GO_M8010_6_txData[0] = 2 << 4;
-    crc =  HAL_CRC_Calculate(&hcrc, (uint32_t *)GO_M8010_6_txData, 15);
-    table = do_crc_table(GO_M8010_6_txData, 15);
-
-    GO_M8010_6_txData[15] = *((uint8_t *)&table);
-    GO_M8010_6_txData[16] = *(((uint8_t *)&table) + 1);
-
-    GO_M8010_6_txData[15] = (table) & 0xFF;
-    GO_M8010_6_txData[16] = (table>>8) & 0xFF;
-
-    
-
-    HAL_UART_Transmit_DMA(&huart2, (uint8_t *)GO_M8010_6_txData, 17);
-
+        GO_M8010_6_insts[i].control.mode.id = i;
+        GO_M8010_6_insts[i].motorID = i;
+        GO_M8010_6_insts[i].control.mode.status = 1;
+    }
 }
 
 
-
+void GO_M8010_6_update()
+{
+    transmit(&GO_M8010_6_insts[0]);
+    currentMotorIndex = 0;
+}

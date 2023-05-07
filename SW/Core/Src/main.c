@@ -154,7 +154,7 @@ int main(void)
   HT4310_init();
   LCD_init();
 
-  // GO_M8010_6_init();
+  GO_M8010_6_init();
   // WAVPlayer_play();
 
   OS_init();

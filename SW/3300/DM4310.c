@@ -28,22 +28,22 @@ static void rxFifoCallback(FDCAN_HandleTypeDef *hfdcan, uint32_t rxFifo0ITs)
         static FDCAN_RxHeaderTypeDef rxHeader;
         HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxHeader, rxData);
 
-        static uint32_t counter = 0;
-        static uint32_t counter1 = 0;
+        // static uint32_t counter = 0;
+        // static uint32_t counter1 = 0;
 
-        switch (rxData[0] & 0xF)
-        {
-        case 1:
-            counter++;
-            break;
-        case 2:
-            counter1++;
-            break;
-        default:
-            break;
-        }
+        // switch (rxData[0] & 0xF)
+        // {
+        // case 1:
+        //     counter++;
+        //     break;
+        // case 2:
+        //     counter1++;
+        //     break;
+        // default:
+        //     break;
+        // }
 
-        memcpy(DM4310_insts[(rxData[0] & 0xF) - 1].rxData, rxData, 8);
+        // memcpy(DM4310_insts[(rxData[0] & 0xF) - 1].rxData, rxData, 8);
             
     }
 }
