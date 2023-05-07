@@ -111,12 +111,12 @@ static void rxCallback(UART_HandleTypeDef* huart)
         if(GO_M8010_6_state == GO_M8010_6_INIT)
         {
             // init all parameter
-            // GO_M8010_6_insts[0].tarPos = GO_M8010_6_insts[0].pos;
-            // GO_M8010_6_insts[0].kPos = 0.9;
-            // GO_M8010_6_insts[0].kSpeed = 0.2;
+            GO_M8010_6_insts[0].tarPos = GO_M8010_6_insts[0].pos;
+            GO_M8010_6_insts[0].kPos = 0.6;
+            GO_M8010_6_insts[0].kSpeed = 0.1;
 
             GO_M8010_6_insts[1].tarPos = GO_M8010_6_insts[1].pos;
-            GO_M8010_6_insts[1].kPos = 0.9;
+            GO_M8010_6_insts[1].kPos = 0.6;
             GO_M8010_6_insts[1].kSpeed = 0.2;
 
             GO_M8010_6_state = GO_M8010_6_RUNNING;

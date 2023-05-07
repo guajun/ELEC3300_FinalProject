@@ -10,11 +10,17 @@
 #include "SpaceMouse.h"
 #include "RotaryEncoder.h"
 #include "IMU.h"
-// #inlcude 
+
+#include "usbh_hid.h"
+#include "usbh_hid_keybd.h"
+#include "usb_host.h"
+
+
 
 float OS_tickFreq = 0;
 
-uint32_t encoder = 0;
+// uint32_t encoder = 0;
+
 
 static void thread(TIM_HandleTypeDef *htim)
 {
@@ -22,7 +28,21 @@ static void thread(TIM_HandleTypeDef *htim)
     OS_tickFreq = (HAL_GetTick() - lastTick) / 0.001;
     lastTick = HAL_GetTick();
 
-    encoder = RotaryEncoder_read();
+    // encoder = RotaryEncoder_read();
+
+    // keybd_info
+
+    // switch (HID_KEYBRD_Key[HID_KEYBRD_Codes[keybd_info.keys[0]]])
+    // {
+    // case 'Q':
+    //     /* code */
+    //     break;
+    
+    // default:
+    //     break;
+    // }
+
+    // HID_KEYBRD_ShiftKey[HID_KEYBRD_Codes[keybd_info.keys[0]]];
 
     DM4310_update();
     HT4310_update();
