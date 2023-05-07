@@ -95,7 +95,7 @@ typedef struct
     GO_M8010_6_Control control;
     GO_M8010_6_Feedback feedback;
     // uint8_t txData[17];
-    enum GO_M8010_6_State state;
+    // enum GO_M8010_6_State state;
     uint8_t motorID; // Not CAN ID
 } GO_M8010_6;
 
