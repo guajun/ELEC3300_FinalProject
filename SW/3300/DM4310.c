@@ -2,7 +2,7 @@
 
 #include "stdint.h"
 #include "fdcan.h"
-
+#include "string.h"
 
 #define DM4310_MST_ID 0x000
 // #define DM4310_SLV_ID 0x001;
@@ -24,9 +24,27 @@ static void rxFifoCallback(FDCAN_HandleTypeDef *hfdcan, uint32_t rxFifo0ITs)
 {
     while (HAL_FDCAN_GetRxFifoFillLevel(hfdcan, FDCAN_RX_FIFO0))
     {
-        static uint8_t rxData[8];
+        uint8_t rxData[8];
         static FDCAN_RxHeaderTypeDef rxHeader;
         HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxHeader, rxData);
+
+        static uint32_t counter = 0;
+        static uint32_t counter1 = 0;
+
+        switch (rxData[0] & 0xF)
+        {
+        case 1:
+            counter++;
+            break;
+        case 2:
+            counter1++;
+            break;
+        default:
+            break;
+        }
+
+        memcpy(DM4310_insts[(rxData[0] & 0xF) - 1].rxData, rxData, 8);
+            
     }
 }
 

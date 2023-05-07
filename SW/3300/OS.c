@@ -1,6 +1,7 @@
 #include "tim.h"
 #include "OS.h"
 #include "DM4310.h"
+#include "HT4310.h"
 #include "stdint.h"
 
 float OS_tickFreq = 0;
