@@ -194,19 +194,21 @@ void IMU_decode()
     float t2 = +2.0 * (dqw * dqy - dqz * dqx);
 	t2 = t2 > 1.0 ? 1.0 : t2;
 	t2 = t2 < -1.0 ? -1.0 : t2;
-	pitch = asin(t2) * 180.0f / M_PI;
+	// pitch = asin(t2) * 180.0f / M_PI;
+    pitch = asin(t2);
 
     float ysqr = dqy * dqy;
 	// yaw (z-axis rotation)
 	float t3 = +2.0 * (dqw * dqz + dqx * dqy);
 	float t4 = +1.0 - 2.0 * (ysqr + dqz * dqz);
-	yaw = atan2(t3, t4) * 180.0f / M_PI;
+	// yaw = atan2(t3, t4) * 180.0f / M_PI;
+    yaw = atan2(t3, t4);
 
 	// roll (x-axis rotation)
 	float t0 = +2.0 * (dqw * dqx + dqy * dqz);
 	float t1 = +1.0 - 2.0 * (dqx * dqx + ysqr);
-	roll = atan2(t0, t1) * 180.0f / M_PI;
-
+	// roll = atan2(t0, t1) * 180.0f / M_PI;
+    roll = atan2(t0, t1);
 }
 
 void IMU_dataReady()

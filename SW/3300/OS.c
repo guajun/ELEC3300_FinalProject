@@ -12,6 +12,13 @@
 #include "IMU.h"
 #include "Keyboard.h"
 
+#define _2_M_PI      6.28318530717958647693  
+#define M_PI		3.14159265358979323846
+#define M_PI_2		1.57079632679489661923
+#define M_PI_4		0.78539816339744830962
+#define M_1_PI		0.31830988618379067154
+#define M_2_PI		0.63661977236758134308
+
 
 #define DM4310_POS_STEP 0.0004
 #define HT4310_POS_STEP 10
@@ -36,7 +43,6 @@ static void keyboardMotor()
     }
 
     k = 1 + num * 0.25;
-    // k = (float)(((int)RotaryEncoder_read()) > 0 ? RotaryEncoder_read() : 0) / 
 
     if(keys.Q == KEY_STATE_PRESSED)
     {
@@ -95,15 +101,48 @@ static void keyboardMotor()
 
 static void imuMotor()
 {
+    static float offsetYaw = 0.0f;
+    static float offsetPitch = 0.0f;
+    static float offsetRoll = 0.0f;
 
-    static float lastYaw = 0.0f;
-    static float lastPitch = 0.0f;
-    static float lastRoll = 0.0f;
+    offsetYaw = yaw - firstYaw;
+    offsetPitch = pitch - firstPitch;
+    offsetRoll =  roll - firstRoll;
 
-    // yaw 
-    // pitch 
-    // roll 
 
+    if(offsetYaw < -M_PI)
+    {
+        offsetYaw += _2_M_PI;
+    }
+    else if(offsetYaw > M_PI)
+    {
+        offsetYaw -= _2_M_PI;
+    }
+
+    if(offsetPitch < -M_PI)
+    {
+        offsetPitch += _2_M_PI;
+    }
+    else if(offsetPitch > M_PI)
+    {
+        offsetPitch -= _2_M_PI;
+    }
+
+    if(offsetRoll < -M_PI)
+    {
+        offsetRoll += _2_M_PI;
+    }
+    else if(offsetRoll > M_PI)
+    {
+        offsetRoll -= _2_M_PI;
+    }
+
+    // YAW QA
+    DM4310_insts[0].control.position = firstYawMotor + offsetYaw;
+    
+    GO_M8010_6_insts[0].tarPos = firstPitchMotor + offsetPitch;
+
+    HT4310_insts[0].control.position = (firstRollMotor + offsetRoll) * 81920;
 
 
 }

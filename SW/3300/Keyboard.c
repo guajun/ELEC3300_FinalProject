@@ -4,12 +4,18 @@
 #include "usbh_hid_keybd.h"
 #include "usb_host.h"
 #include <string.h>
+#include "IMU.h"
+#include "HT4310.h"
+#include "DM4310.h"
+#include "GO_M8010_6.h"
 
+float firstRoll = 0.0f;
+float firstPitch = 0.0f;
+float firstYaw = 0.0f;
 
-// extern HID_KEYBD_Info_TypeDef keybd_info;
-// extern const uint8_t HID_KEYBRD_ShiftKey[];
-// extern const uint8_t HID_KEYBRD_Codes[];
-// extern const uint8_t HID_KEYBRD_Key[];
+float firstRollMotor = 0.0f;
+float firstPitchMotor = 0.0f;
+float firstYawMotor = 0.0f;
 
 uint8_t imuMotorCtr = 0;
 
@@ -104,7 +110,20 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 
 		if(keys.L)
 		{
+			if(!imuMotorCtr)
+			{
+				firstRoll = roll;
+				firstPitch = pitch;
+				firstYaw = yaw;
+
+
+				firstYawMotor = DM4310_insts[0].control.position;
+				firstPitchMotor = GO_M8010_6_insts[0].tarPos;
+				firstRollMotor = (float)HT4310_insts[0].control.position / 81920;
+
+			}
 			imuMotorCtr = !imuMotorCtr;
+
 		}
 	}
 

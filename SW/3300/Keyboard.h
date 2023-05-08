@@ -29,3 +29,10 @@ extern struct Keys
 }keys;
 
 extern uint8_t imuMotorCtr;
+extern float firstRoll;
+extern float firstPitch;
+extern float firstYaw;
+
+extern float firstRollMotor;
+extern float firstPitchMotor;
+extern float firstYawMotor;
