@@ -3,7 +3,7 @@
 #include "adc.h"
 #include "stdint.h"
 
-#define TEMPERATURE_SENSOR_VREF ((uint16_t)3100)
+#define TEMPERATURE_SENSOR_VREF ((uint16_t)3320)
 
 uint16_t adcData = 0;
 

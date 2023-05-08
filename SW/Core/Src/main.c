@@ -205,7 +205,10 @@ int main(void)
     default:
       break;
     }
-    
+
+    char text3[6] = {0};
+    sprintf(text3, "%5u", TemperatureSensor_getTemp());
+    LCD_ShowString(0, 42, ST7735Ctx.Width, 16, 12, text3);
 
     if(localTick % 25)
     {
