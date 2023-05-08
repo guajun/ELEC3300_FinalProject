@@ -28,7 +28,7 @@ extern struct Keys
 
 }keys;
 
-extern uint8_t imuMotorCtr;
+extern uint8_t motorCtr;
 extern float firstRoll;
 extern float firstPitch;
 extern float firstYaw;

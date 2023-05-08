@@ -34,9 +34,9 @@ void getBuffer(uint8_t * buffer)
 
 void checkLength()
 {
-    if(WAVPlayer_dataSize < (WAVPlayer_readIndex << 9) )
+    if(WAVPlayer_dataSize < ((WAVPlayer_readIndex - SONG_1_BLOCK_ADDRESS) << 9) )
     {
-        HAL_I2S_DMAStop(&hi2s1);
+      HAL_I2S_DMAStop(&hi2s1);
     }
 }
 

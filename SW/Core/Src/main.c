@@ -47,6 +47,7 @@
 #include "string.h"
 #include "HT4310.h"
 #include "DM4310.h"
+#include "Keyboard.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -148,7 +149,8 @@ int main(void)
   IMU_init();
   HAL_Delay(50);
   TemperatureSensor_init();
-  SpaceMouse_init();
+  SpaceMouse_init(); 
+  HAL_Delay(10);
   BreathingLight_init();
   WAVPlayer_init();
   HAL_Delay(1000);
@@ -176,8 +178,34 @@ int main(void)
     char text[11] = "";
     memset(text, ' ', 10);
     sprintf(text, "%10u", encoder);
-    LCD_ShowString(0, 16, ST7735Ctx.Width, 16, 12, text);
+    LCD_ShowString(0, 14, ST7735Ctx.Width, 16, 12, text);
 
+    char text2[11] = "";
+    memset(text, 0, 10);
+    switch (motorCtr)
+    {
+    case 0:
+      
+      sprintf(text2, "%10s", "Keyboard");
+      LCD_ShowString(0, 28, ST7735Ctx.Width, 16, 12, text2);
+      break;
+
+    case 1:
+      // char text2[11] = "";
+      sprintf(text2, "%10s", "IMU");
+      LCD_ShowString(0, 28, ST7735Ctx.Width, 16, 12, text2);
+      break;
+
+    case 2:
+      // char text2[11] = "";
+      sprintf(text2, "%10s", "SpaceMouse");
+      LCD_ShowString(0, 28, ST7735Ctx.Width, 16, 12, text2);
+
+      break;
+    default:
+      break;
+    }
+    
 
     if(localTick % 25)
     {

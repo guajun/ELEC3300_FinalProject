@@ -143,8 +143,18 @@ static void imuMotor()
     GO_M8010_6_insts[0].tarPos = firstPitchMotor + offsetPitch;
 
     HT4310_insts[0].control.position = (firstRollMotor + offsetRoll) * 81920;
+}
 
+static void spaceMouseMotor()
+{
+    DM4310_insts[0].control.position += (float)SpaceMouse_rxData.b / 16384 * 0.02f;
+    DM4310_insts[1].control.position += (float)SpaceMouse_rxData.x / 16384 * 0.02f;
 
+    HT4310_insts[0].control.position += (float)SpaceMouse_rxData.y / 16;
+    HT4310_insts[1].control.position += (float)SpaceMouse_rxData.z / 16;
+
+    GO_M8010_6_insts[0].tarPos += (float)SpaceMouse_rxData.a / 16384 * 0.03f;
+    GO_M8010_6_insts[1].tarPos += (float)SpaceMouse_rxData.c / 16384 * 0.03f;
 }
 
 static void thread(TIM_HandleTypeDef *htim)
@@ -157,14 +167,20 @@ static void thread(TIM_HandleTypeDef *htim)
 
     // if(lastLKeyState != keys.L && key)
 
-    if(imuMotorCtr)
+    switch (motorCtr)
     {
-        imuMotor();
-    }
-    else
-    {
+    case 0:
         keyboardMotor();
+        break;
+    case 1:
+        imuMotor();
+        break;
+    case 2:
+        spaceMouseMotor();
+    default:
+        break;
     }
+
     
 
     DM4310_update();

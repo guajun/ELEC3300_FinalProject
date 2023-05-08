@@ -17,7 +17,7 @@ float firstRollMotor = 0.0f;
 float firstPitchMotor = 0.0f;
 float firstYawMotor = 0.0f;
 
-uint8_t imuMotorCtr = 0;
+uint8_t motorCtr = 0;
 
 struct Keys keys;
 
@@ -110,20 +110,23 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 
 		if(keys.L)
 		{
-			if(!imuMotorCtr)
+			if(motorCtr == 0)
 			{
 				firstRoll = roll;
 				firstPitch = pitch;
 				firstYaw = yaw;
 
-
 				firstYawMotor = DM4310_insts[0].control.position;
 				firstPitchMotor = GO_M8010_6_insts[0].tarPos;
 				firstRollMotor = (float)HT4310_insts[0].control.position / 81920;
-
 			}
-			imuMotorCtr = !imuMotorCtr;
 
+			motorCtr++;
+
+			if(motorCtr >= 3)
+			{
+				motorCtr = 0;
+			}
 		}
 	}
 

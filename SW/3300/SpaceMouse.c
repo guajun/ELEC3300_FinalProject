@@ -102,21 +102,8 @@ uint16_t getChecksum()
 
 void rxCallback(UART_HandleTypeDef *huart, uint16_t length)
 {
-    // static uint8_t flag1 = 0;
-    // static uint8_t flag2 = 0;
-    // flag1 = -1;
     switch (state)
     {
-    // case SPACEMOUSE_RESET:
-    //     // flag1 = 1;
-    //     if(length == 2 && SpaceMouse_rxRawData[0] == SPACEMOUSE_AUTODATA_OFF && SpaceMouse_rxRawData[1] == SPACEMOUSE_END_BYTE)
-    //     {
-    //         // flag1 = 2;
-    //         state = SPACEMOUSE_INIT;
-    //         uint8_t txData[] = {SPACEMOUSE_AUTODATA_ON};
-    //         HAL_UART_Transmit_IT(&huart6, txData, 1);
-    //     }
-    //     break;
 
     case SPACEMOUSE_INIT:
         if(length == 2 && SpaceMouse_rxRawData[0] == SPACEMOUSE_AUTODATA_ON && SpaceMouse_rxRawData[1] == SPACEMOUSE_END_BYTE)
