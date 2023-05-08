@@ -528,8 +528,6 @@ __weak void HAL_FMAC_MspDeInit(FMAC_HandleTypeDef *hfmac)
 /**
   * @brief  Register a User FMAC Callback.
   * @note   The User FMAC Callback is to be used instead of the weak predefined callback.
-  * @note   The HAL_FMAC_RegisterCallback() may be called before HAL_FMAC_Init() in HAL_FMAC_STATE_RESET to register
-  *         callbacks for HAL_FMAC_MSPINIT_CB_ID and HAL_FMAC_MSPDEINIT_CB_ID.
   * @param  hfmac pointer to a FMAC_HandleTypeDef structure that contains
   *         the configuration information for FMAC module.
   * @param  CallbackID ID of the callback to be registered.
@@ -564,6 +562,7 @@ HAL_StatusTypeDef HAL_FMAC_RegisterCallback(FMAC_HandleTypeDef *hfmac, HAL_FMAC_
 
     return HAL_ERROR;
   }
+  __HAL_LOCK(hfmac);
 
   if (hfmac->State == HAL_FMAC_STATE_READY)
   {
@@ -644,14 +643,14 @@ HAL_StatusTypeDef HAL_FMAC_RegisterCallback(FMAC_HandleTypeDef *hfmac, HAL_FMAC_
     status =  HAL_ERROR;
   }
 
+  __HAL_UNLOCK(hfmac);
+
   return status;
 }
 
 /**
   * @brief  Unregister a FMAC CallBack.
   * @note   The FMAC callback is redirected to the weak predefined callback.
-  * @note   The HAL_FMAC_UnRegisterCallback() may be called before HAL_FMAC_Init() in HAL_FMAC_STATE_RESET to register
-  *         callbacks for HAL_FMAC_MSPINIT_CB_ID and HAL_FMAC_MSPDEINIT_CB_ID.
   * @param  hfmac pointer to a FMAC_HandleTypeDef structure that contains
   *         the configuration information for FMAC module
   * @param  CallbackID ID of the callback to be unregistered.
@@ -676,6 +675,8 @@ HAL_StatusTypeDef HAL_FMAC_UnRegisterCallback(FMAC_HandleTypeDef *hfmac, HAL_FMA
   {
     return HAL_ERROR;
   }
+
+  __HAL_LOCK(hfmac);
 
   if (hfmac->State == HAL_FMAC_STATE_READY)
   {
@@ -758,6 +759,8 @@ HAL_StatusTypeDef HAL_FMAC_UnRegisterCallback(FMAC_HandleTypeDef *hfmac, HAL_FMA
     /* Return error status */
     status = HAL_ERROR;
   }
+
+  __HAL_UNLOCK(hfmac);
 
   return status;
 }

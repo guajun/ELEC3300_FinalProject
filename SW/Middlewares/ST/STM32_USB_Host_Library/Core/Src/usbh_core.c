@@ -7,12 +7,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2015 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2015 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                      www.st.com/SLA0044
   *
   ******************************************************************************
   */
@@ -92,9 +93,9 @@ static void USBH_Process_OS(void *argument);
   * @param  pUsrFunc: User Callback
   * @retval USBH Status
   */
-USBH_StatusTypeDef USBH_Init(USBH_HandleTypeDef *phost,
-                             void (*pUsrFunc)(USBH_HandleTypeDef *phost,
-                                              uint8_t id), uint8_t id)
+USBH_StatusTypeDef  USBH_Init(USBH_HandleTypeDef *phost,
+                              void (*pUsrFunc)(USBH_HandleTypeDef *phost,
+                                               uint8_t id), uint8_t id)
 {
   /* Check whether the USB Host handle is valid */
   if (phost == NULL)
@@ -246,12 +247,6 @@ static USBH_StatusTypeDef DeInitStateMachine(USBH_HandleTypeDef *phost)
   phost->device.RstCnt = 0U;
   phost->device.EnumCnt = 0U;
 
-  /* Reset the device struct */
-  USBH_memset(&phost->device.CfgDesc_Raw, 0, sizeof(phost->device.CfgDesc_Raw));
-  USBH_memset(&phost->device.Data, 0, sizeof(phost->device.Data));
-  USBH_memset(&phost->device.DevDesc, 0, sizeof(phost->device.DevDesc));
-  USBH_memset(&phost->device.CfgDesc, 0, sizeof(phost->device.CfgDesc));
-
   return USBH_OK;
 }
 
@@ -343,7 +338,7 @@ uint8_t USBH_GetActiveClass(USBH_HandleTypeDef *phost)
   * @retval interface index in the configuration structure
   * @note : (1)interface index 0xFF means interface index not found
   */
-uint8_t USBH_FindInterface(USBH_HandleTypeDef *phost, uint8_t Class, uint8_t SubClass, uint8_t Protocol)
+uint8_t  USBH_FindInterface(USBH_HandleTypeDef *phost, uint8_t Class, uint8_t SubClass, uint8_t Protocol)
 {
   USBH_InterfaceDescTypeDef *pif;
   USBH_CfgDescTypeDef *pcfg;
@@ -376,7 +371,7 @@ uint8_t USBH_FindInterface(USBH_HandleTypeDef *phost, uint8_t Class, uint8_t Sub
   * @retval interface index in the configuration structure
   * @note : (1)interface index 0xFF means interface index not found
   */
-uint8_t USBH_FindInterfaceIndex(USBH_HandleTypeDef *phost, uint8_t interface_number, uint8_t alt_settings)
+uint8_t  USBH_FindInterfaceIndex(USBH_HandleTypeDef *phost, uint8_t interface_number, uint8_t alt_settings)
 {
   USBH_InterfaceDescTypeDef *pif;
   USBH_CfgDescTypeDef *pcfg;
@@ -404,7 +399,7 @@ uint8_t USBH_FindInterfaceIndex(USBH_HandleTypeDef *phost, uint8_t interface_num
   * @param  phost: Host Handle
   * @retval USBH Status
   */
-USBH_StatusTypeDef USBH_Start(USBH_HandleTypeDef *phost)
+USBH_StatusTypeDef  USBH_Start(USBH_HandleTypeDef *phost)
 {
   /* Start the low level driver  */
   (void)USBH_LL_Start(phost);
@@ -422,7 +417,7 @@ USBH_StatusTypeDef USBH_Start(USBH_HandleTypeDef *phost)
   * @param  phost: Host Handle
   * @retval USBH Status
   */
-USBH_StatusTypeDef USBH_Stop(USBH_HandleTypeDef *phost)
+USBH_StatusTypeDef  USBH_Stop(USBH_HandleTypeDef *phost)
 {
   /* DeActivate VBUS on the port */
   (void)USBH_LL_DriverVBUS(phost, FALSE);
@@ -475,7 +470,7 @@ USBH_StatusTypeDef USBH_ReEnumerate(USBH_HandleTypeDef *phost)
   * @param  phost: Host Handle
   * @retval USBH Status
   */
-USBH_StatusTypeDef USBH_Process(USBH_HandleTypeDef *phost)
+USBH_StatusTypeDef  USBH_Process(USBH_HandleTypeDef *phost)
 {
   __IO USBH_StatusTypeDef status = USBH_FAIL;
   uint8_t idx = 0U;
@@ -1184,7 +1179,7 @@ static USBH_StatusTypeDef USBH_HandleEnum(USBH_HandleTypeDef *phost)
   * @param  phost: Host Handle
   * @retval None
   */
-void USBH_LL_SetTimer(USBH_HandleTypeDef *phost, uint32_t time)
+void  USBH_LL_SetTimer(USBH_HandleTypeDef *phost, uint32_t time)
 {
   phost->Timer = time;
 }
@@ -1196,7 +1191,7 @@ void USBH_LL_SetTimer(USBH_HandleTypeDef *phost, uint32_t time)
   * @param  phost: Host Handle
   * @retval None
   */
-void USBH_LL_IncTimer(USBH_HandleTypeDef *phost)
+void  USBH_LL_IncTimer(USBH_HandleTypeDef *phost)
 {
   phost->Timer++;
   USBH_HandleSof(phost);
@@ -1209,7 +1204,7 @@ void USBH_LL_IncTimer(USBH_HandleTypeDef *phost)
   * @param  phost: Host Handle
   * @retval None
   */
-static void USBH_HandleSof(USBH_HandleTypeDef *phost)
+static void  USBH_HandleSof(USBH_HandleTypeDef *phost)
 {
   if ((phost->gState == HOST_CLASS) && (phost->pActiveClass != NULL))
   {
@@ -1269,11 +1264,11 @@ uint8_t USBH_IsPortEnabled(USBH_HandleTypeDef *phost)
 
 /**
   * @brief  USBH_LL_Connect
-  *         Handle USB Host connection event
+  *         Handle USB Host connexion event
   * @param  phost: Host Handle
   * @retval USBH_Status
   */
-USBH_StatusTypeDef USBH_LL_Connect(USBH_HandleTypeDef *phost)
+USBH_StatusTypeDef  USBH_LL_Connect(USBH_HandleTypeDef *phost)
 {
   phost->device.is_connected = 1U;
   phost->device.is_disconnected = 0U;
@@ -1299,7 +1294,7 @@ USBH_StatusTypeDef USBH_LL_Connect(USBH_HandleTypeDef *phost)
   * @param  phost: Host Handle
   * @retval USBH_Status
   */
-USBH_StatusTypeDef USBH_LL_Disconnect(USBH_HandleTypeDef *phost)
+USBH_StatusTypeDef  USBH_LL_Disconnect(USBH_HandleTypeDef *phost)
 {
   /* update device connection states */
   phost->device.is_disconnected = 1U;
@@ -1370,7 +1365,7 @@ static void USBH_Process_OS(void *argument)
   * @param  phost: Host handle
   * @retval USBH Status
   */
-USBH_StatusTypeDef USBH_LL_NotifyURBChange(USBH_HandleTypeDef *phost)
+USBH_StatusTypeDef  USBH_LL_NotifyURBChange(USBH_HandleTypeDef *phost)
 {
   phost->os_msg = (uint32_t)USBH_PORT_EVENT;
 
@@ -1399,3 +1394,4 @@ USBH_StatusTypeDef USBH_LL_NotifyURBChange(USBH_HandleTypeDef *phost)
   * @}
   */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -64,10 +64,10 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-struct GRB grbArray[15];
-uint32_t localTick = 0;
-/* USER CODE BEGIN PV */
 
+/* USER CODE BEGIN PV */
+uint32_t localTick = 0;
+struct GRB grbArray[15];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -146,6 +146,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   RotaryEncoder_init();
   IMU_init();
+  HAL_Delay(50);
   TemperatureSensor_init();
   SpaceMouse_init();
   BreathingLight_init();
@@ -156,7 +157,7 @@ int main(void)
   LCD_init();
 
   GO_M8010_6_init();
-  // WAVPlayer_play();
+  WAVPlayer_play();
 
   OS_init();
   /* USER CODE END 2 */

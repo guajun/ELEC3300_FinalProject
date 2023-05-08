@@ -84,23 +84,13 @@ struct BNO080Error {
 
 
 uint32_t stateCntr = 0;
-uint8_t shtpRxRawData[280] = {};
+__attribute__((section(".D1"))) uint8_t shtpRxRawData[280] = {0};
 uint8_t shtpTxRawData[280] = {};
 uint8_t sequenceNumbers[6] = {0, 0, 0, 0, 0, 0};
 
 
 
 
-
-void IMU_init()
-{
-
-    // Low RST
-    HAL_GPIO_WritePin(IMU_RST_GPIO_Port, IMU_RST_Pin, GPIO_PIN_RESET);
-    HAL_Delay(2);
-    HAL_GPIO_WritePin(IMU_RST_GPIO_Port, IMU_RST_Pin, GPIO_PIN_SET);
-
-}
 
 
 void IMU_sendPacket(uint8_t channelNumber, uint8_t dataLen)
@@ -240,8 +230,8 @@ void IMU_dataReady()
         if(stateCntr > 10)
         {
             memset(shtpRxRawData, 0, 25);
-            HAL_SPI_Receive(&hspi2, shtpRxRawData, 25, 1);
-            IMU_decode();
+            HAL_SPI_Receive_DMA(&hspi2, shtpRxRawData, 25);
+            // IMU_decode();
         }
         else
         {
@@ -254,6 +244,21 @@ void IMU_dataReady()
 
 
 
+static void rxCallback()
+{
+    IMU_decode();
+}
+
+
+void IMU_init()
+{
+    // Low RST
+    HAL_GPIO_WritePin(IMU_RST_GPIO_Port, IMU_RST_Pin, GPIO_PIN_RESET);
+    HAL_Delay(2);
+    HAL_GPIO_WritePin(IMU_RST_GPIO_Port, IMU_RST_Pin, GPIO_PIN_SET);
+
+    HAL_SPI_RegisterCallback(&hspi2, HAL_SPI_RX_COMPLETE_CB_ID, rxCallback);
+}
 
 
 
