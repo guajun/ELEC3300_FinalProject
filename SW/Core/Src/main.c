@@ -145,6 +145,7 @@ int main(void)
   MX_ADC3_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
+  HAL_Delay(500);
   RotaryEncoder_init();
   IMU_init();
   HAL_Delay(50);
